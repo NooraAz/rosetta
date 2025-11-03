@@ -741,7 +741,9 @@ sources = {
 		#"make_blueprint", # /* Nobuyasu,Documentation Location,Demo Location */
 		#"rama", # /* Nobuyasu,Documentation Location,Demo Location */
 	],
-
+    "pilot/nooraaz" : [
+        "bootcamp",
+    ],
 	# O ######################################################################
 	"pilot/olli" : [
 		"cloud_app",

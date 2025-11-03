@@ -448,9 +448,9 @@ settings = {
             "flags" : {
                 "warn" : [
                     "Wno-error=array-bounds=", # There's a probably spurious "__builtin_memmove() forming offset is out of the bounds" warning for vector1<bool>
-                    "Wno-error=stringop-overread", # Issue with Eigen
+                    #"Wno-error=stringop-overread", # Issue with Eigen
                     "Wno-error=restrict", # Issue with json-spirit
-                    "Wno-error=dangling-reference", # Too agressive.
+                    #"Wno-error=dangling-reference", # Too agressive.
                 ],
             },
         },
