@@ -78,6 +78,9 @@ sources = {
 	"backrub" : [
 		"BackrubProtocolTests",
 	],
+	"bootcamp": [
+		"FoldTreeFromSS",
+	],
 
 	"branch_angle" : [
 		"BranchAngleOptimizer",
@@ -262,7 +265,6 @@ sources = {
 	"fold_from_loops": [
 		"NubInitioMover",
 	],
-
 	"frag_picker" : [
 		"FragmentCandidatesTests",
 		"TorsionBinIO",
