@@ -59,43 +59,7 @@ public:
 		TS_ASSERT ( true );
   }
 
-  utility::vector1< std::pair< core::Size, core::Size > >
-  identify_secondary_structure_spans( std::string const & ss_string ) {
-    utility::vector1< std::pair< core::Size, core::Size > > ss_boundaries;
-    core::Size strand_start = -1;
-    for ( core::Size ii = 0; ii < ss_string.size(); ++ii ) {
-      if ( ss_string[ ii ] == 'E' || ss_string[ ii ] == 'H'  ) {
-        if ( int( strand_start ) == -1 ) {
-          strand_start = ii;
-        } else if ( ss_string[ii] != ss_string[strand_start] ) {
-          ss_boundaries.push_back( std::make_pair( strand_start+1, ii ) );
-          strand_start = ii;
-        }
-       } else {
-         if ( int( strand_start ) != -1 ) {
-           ss_boundaries.push_back( std::make_pair( strand_start+1, ii ) );
-           strand_start = -1;
-         }
-       }
-    }
-
-    if ( int( strand_start ) != -1 ) {
-    // last residue was part of a ss-eleemnt
-      ss_boundaries.push_back( std::make_pair( strand_start+1, ss_string.size() ));
-    }
-    for ( core::Size ii = 1; ii <= ss_boundaries.size(); ++ii ) {
-       std::cout << "SS Element " << ii << " from residue "
-       << ss_boundaries[ ii ].first << " to "
-       << ss_boundaries[ ii ].second << std::endl;
-      }
-    return ss_boundaries;
-    }
-    
   void test_known_strings(){
-    utility::vector1< std::pair< core::Size, core::Size > > s1_pairs = {{1,5},{6,13},{14,18},{24,29},{30,40},{41,45},{46,49}};
-    utility::vector1< std::pair< core::Size, core::Size > > s2_pairs = {{1,7},{9,32},{33,42},{43,49},{50,53},{54,56}};
-    utility::vector1< std::pair< core::Size, core::Size > > s3_pairs = {{1,9},{11,18},{20,28},{30,30},{32,36},{38,38},{40,40},{42,42},{44,51}};
-
     TS_ASSERT_EQUALS(identify_secondary_structure_spans(s1_), s1_pairs);
     TS_ASSERT_EQUALS(identify_secondary_structure_spans(s2_), s2_pairs);
     TS_ASSERT_EQUALS(identify_secondary_structure_spans(s3_), s3_pairs);
@@ -104,37 +68,6 @@ public:
   // secondary structure string -> fold tree 
   core::kinematics::FoldTree
 	fold_tree_from_dssp_string ( std::string const & dssp ) {
-    core::kinematics::FoldTree foldtree;
-    // Vector of all non-loop spans
-    utility::vector1< std::pair< core::Size, core::Size > > edges = 
-      identify_secondary_structure_spans(dssp);
-    // Vector of all loop spans
-    utility::vector1< std::pair< core::Size, core::Size > > gaps;
-    for (auto e = edges.begin(); e!= edges.end(); e++){
-			if ( e+1 != edges.end()){
-      	auto next_e = e+1;
-				bool there_is_a_gap = static_cast<bool>( next_e->first - e->second -1  );
-        if ( there_is_a_gap ){
-					gaps.push_back({e->second+1,next_e->first-1});
-				}
-      }
-		}
-
-    // Adding jumps 
-    int midppint_of_first_block = static_cast<int>( (edges[1].first + edges[1].second ) / 2 );
-    int n = 1;
-    //// From mid-first to all mid-non-loops
-    for (auto e = edges.begin() + 1; e!= edges.end(); e++){
-      int midpoint = static_cast<int>( (e->first + e->second ) / 2 );
-      foldtree.add_edge(midppint_of_first_block, midpoint, n);
-      n = n + 1;    
-		}
-		//// From mid-first to all mid-loops 
-		for (auto g = gaps.begin(); g!= gaps.end(); g++){
-			int gap_mid = static_cast<int>( (g->first + g->second ) / 2 );
-			foldtree.add_edge(midppint_of_first_block, gap_mid, n);
-			n = n + 1;
-		}
 
     // Adding peptide edges
     //// From mid to both ways, for non-loops
@@ -154,17 +87,15 @@ public:
     return foldtree;
   } // end of fold_tree_from_dssp_string
 
-  core::kinematics::FoldTree fold_tree_from_ss(core::pose::Pose const & pose){
-    core::scoring::dssp::Dssp dssp = core::scoring::dssp::Dssp( pose );
-    std::string secondary_structure = dssp.get_dssp_secstruct();
-    return fold_tree_from_dssp_string( secondary_structure );
-  }
-
   private:
 		std::string s1_ = "EEEEEHHHHHHHHEEEEEIGNOREEEEEEHHHHHHHHHHHEEEEEHHHH";
 		std::string s2_ = "HHHHHHH HHHHHHHHHHHHHHHHHHHHHHHHEEEEEEEEEEHHHHHHHEEEEHHH";
 		std::string s3_ = "EEEEEEEEE EEEEEEEE EEEEEEEEE H EEEEE H H H EEEEEEEE";
 		std::string s4_ = "   EEEEEEE    EEEEEEE         EEEEEEEEE    EEEEEEEEEE   HHHHHH         EEEEEEEEE         EEEEE     ";
- 
-    
+    utility::vector1< std::pair< core::Size, core::Size > > s1_pairs_ = 
+      {{1,5},{6,13},{14,18},{24,29},{30,40},{41,45},{46,49}};
+    utility::vector1< std::pair< core::Size, core::Size > > s2_pairs_ = 
+      {{1,7},{9,32},{33,42},{43,49},{50,53},{54,56}};
+    utility::vector1< std::pair< core::Size, core::Size > > s3_pairs_ = 
+			{{1,9},{11,18},{20,28},{30,30},{32,36},{38,38},{40,40},{42,42},{44,51}};
 };

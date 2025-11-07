@@ -58,7 +58,7 @@
 #include <protocols/backrub/BackrubProtocolCreator.hh>
 #include <protocols/backrub/BackrubSidechainMoverCreator.hh>
 
-
+#include <protocols/bootcamp/BootCampMoverCreator.hh>
 // C //////////////////////////////////////////////////////////////////////////
 #include <protocols/canonical_sampling/MetricRecorderCreator.hh>
 #include <protocols/canonical_sampling/MetropolisHastingsMoverCreator.hh>

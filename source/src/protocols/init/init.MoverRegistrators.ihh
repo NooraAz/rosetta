@@ -61,6 +61,8 @@ static MoverRegistrator< backrub::BackrubMoverCreator > reg_BackrubMoverCreator;
 static MoverRegistrator< backrub::BackrubProtocolCreator > reg_BackrubProtocolCreator;
 static MoverRegistrator< backrub::BackrubSidechainMoverCreator > reg_BackrubSidechainMoverCreator;
 
+static MoverRegistrator< bootcamp::BootCampMoverCreator > reg_BootCampMoverCreator;
+
 // C //////////////////////////////////////////////////////////////////////////
 static MoverRegistrator< canonical_sampling::MetricRecorderCreator > reg_MetricRecorderCreator;
 static MoverRegistrator< canonical_sampling::MetropolisHastingsMoverCreator > reg_MetropolisHastingsMoverCreator;
